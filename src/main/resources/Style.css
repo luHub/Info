@@ -1,0 +1,18 @@
+.text-area{
+	-fx-font: 16px "System";
+} 
+.text-field{
+	-fx-font: 16px "System";
+}
+.list-view{
+	-fx-font: 16px "System";
+}
+.button{
+	-fx-font: 14px "System";
+}
+.label{
+	-fx-font: 16px "System";
+}
+.checkbox{
+	-fx-font: 16px "System";
+}
