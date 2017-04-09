@@ -14,10 +14,10 @@ import meta.working.InfoDTO;
 import meta.working.MapInfoDTO;
 
 public class InfoService<V> extends Service<V> {
- 
-	private ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> infoMap = new ConcurrentHashMap();
-	protected Queue<InfoFileOps> queue = new ConcurrentLinkedQueue();
-	private List<InfoInList> infoForList = new ArrayList();
+
+	private final ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> infoMap = new ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>>();
+	protected final Queue<InfoFileOps> queue = new ConcurrentLinkedQueue();
+	private final List<InfoInList> infoForList = new ArrayList();
 	private InfoManager infoManager;
 
 	@Override
@@ -68,67 +68,67 @@ public class InfoService<V> extends Service<V> {
 	}
 
 	public void setInfoManager(InfoManager infoManager) {
-		this.infoManager=infoManager;
+		this.infoManager = infoManager;
 	}
 
-
- 
 	public List<InfoInList> getInfoForList() {
 		return this.infoForList;
 	}
 
 	public void addInfoFileToSave(FileDTO<Integer, ConvertableToJSON> fileDTO) {
-		synchronized ( queue ) {
-		    // Add work to the queue
+		synchronized (queue) {
+			// Add work to the queue
 			InfoFileOps infoFileOps = new InfoFileOps();
-			infoFileOps.setInfoFromList(this.getInfoForList()); 
+			infoFileOps.setInfoFromList(this.getInfoForList());
 			infoFileOps.setInfoMap(this.infoMap);
 			infoFileOps.setInfoManager(this.infoManager);
 			infoFileOps.setInfoFromList(infoForList);
 			infoFileOps.updateInfoToFile(fileDTO);
-			queue.add(infoFileOps); 
-		    // Notify the monitor object that all the threads
-		    // are waiting on. This will awaken just one to
-		    // begin processing work from the queue
-		    queue.notify();
+			queue.add(infoFileOps);
+			// Notify the monitor object that all the threads
+			// are waiting on. This will awaken just one to
+			// begin processing work from the queue
+			queue.notify();
 		}
 	}
-	
-	//TODO Get Info From Files
-	public void getInfoFromFiles(){
-		synchronized ( queue ) {
-		    // Add work to the queue
+
+	// TODO Get Info From Files
+	public void getInfoFromFiles() {
+		synchronized (queue) {
+			// Add work to the queue
 			InfoFileOps infoFileOps = new InfoFileOps();
 			infoFileOps.setInfoFromList(this.infoForList);
 			infoFileOps.setInfoMap(this.infoMap);
 			infoFileOps.setInfoManager(this.infoManager);
-			queue.add(infoFileOps); 
-		    // Notify the monitor object that all the threads
-		    // are waiting on. This will awaken just one to
-		    // begin processing work from the queue
-		    queue.notify();
+			queue.add(infoFileOps);
+			// Notify the monitor object that all the threads
+			// are waiting on. This will awaken just one to
+			// begin processing work from the queue
+			queue.notify();
 		}
 	}
-	
+
 	public boolean isQueueEmpty() {
 		// TODO Auto-generated method stub
 		return queue.isEmpty();
 	}
-	
-	
-	
-	
-	//TODO: Delete infoFile 
+
+	// TODO: Delete infoFile
 	public void deleteFile(int id) {
-		synchronized ( queue ) {
-		/*	QuestionFileOps questionFileOps = new QuestionFileOps();
-			questionFileOps.setQuestionFromList(this.questionForList);
-			questionFileOps.setQuestionMap(this.questionMap);
-			questionFileOps.setQuestionManager(this.questionManager);
-			questionFileOps.setQuestionIdToDelete(id);
-			queue.add(questionFileOps);
-			queue.notify();*/
+		synchronized (queue) {
+			/*
+			 * QuestionFileOps questionFileOps = new QuestionFileOps();
+			 * questionFileOps.setQuestionFromList(this.questionForList);
+			 * questionFileOps.setQuestionMap(this.questionMap);
+			 * questionFileOps.setQuestionManager(this.questionManager);
+			 * questionFileOps.setQuestionIdToDelete(id);
+			 * queue.add(questionFileOps); queue.notify();
+			 */
 		}
 	}
 
-} 
+	public ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> getInfoMap() {
+		return infoMap;
+	}
+
+}

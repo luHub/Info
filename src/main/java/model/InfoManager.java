@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import commons.WorkbookIO;
+import info.InfoPanelController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
+import meta.working.INFO_TYPE;
 import meta.working.InfoDTO;
 import meta.working.MapInfoDTO;
 import user.User;
@@ -24,10 +26,20 @@ public class InfoManager {
 	private User user;
 	private boolean isModule=true;
 	private MODE mode;	
-	private EditMode editMode;
+	private final  EditMode editMode = new EditMode(this);
 	private ReadMode readMode;
 	private ListView<InfoInList> infoListView;
 	private final String INFO = "info";
+	
+	
+	private InfoPanelController infoPanelController;
+	
+	
+	public InfoManager(InfoPanelController infoPanelController){
+		this.infoPanelController = infoPanelController;
+		initUser();
+		initializeInfoService();
+	}
 	
 	public InfoManager(){ 
 		initUser();
@@ -42,7 +54,14 @@ public class InfoManager {
 		public void changed(ObservableValue<? extends InfoInList> observable, InfoInList oldValue,
 				InfoInList newValue) {
 			//Switch List views
+			//1. Get Selected Info 
+			//TODO Check this ugly cast!
+			FileDTO<Integer, MapInfoDTO> currentInfoFile = (FileDTO<Integer, MapInfoDTO>) infoService.getInfoMap().get(newValue.getId());
+			//2. Display it on the Info Pane
+			//TODO Add EDIT and READ MODE
+			InfoManager.this.editMode.setCurrentInfo(currentInfoFile);
 			
+			 
 			// Set StudyModeManagerView
 //			if(newValue!=null){
 //			Integer questionId = newValue.getId();
@@ -95,8 +114,8 @@ public class InfoManager {
 		InfoDTO infoDTO = new InfoDTO();
 		
 		infoDTO.setText("Insert Text Here");
-		infoDTO.setContainsText(true);
-		mapInfoDTO.getMap().put(fileId, infoDTO);
+		infoDTO.setType(INFO_TYPE.TEXT);
+		mapInfoDTO.getMap().put(0, infoDTO);
 		mapInfoDTO.setTitle("INFO");  
 		FileDTO<Integer,ConvertableToJSON> fileDTO = new FileDTO(fileId, INFO_PATH, ext);
 		fileDTO.setContend(mapInfoDTO);
@@ -108,6 +127,7 @@ public class InfoManager {
 		this.infoService.start();
 		this.infoService.getInfoFromFiles();
 	}
+	
 
 	public void updateUI() {
 		Platform.runLater(() -> {			
@@ -144,5 +164,51 @@ public class InfoManager {
 
 	public Path getInfoPath() {
 		return Paths.get(user.path().toString(),"info");
+	}
+
+	public InfoPanelController getInfoPanelController() {
+		return infoPanelController;
+	}
+
+	public void setReadMode() {
+		
+	}
+
+	public void setEditMode() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void createNewText() {
+		//1. Get CurrentInfoDTO
+		 InfoInList infoInList=this.infoListView.getSelectionModel().getSelectedItem();
+		 //2. Append a new Key Pair to its end
+		 FileDTO<Integer, MapInfoDTO> currentInfoFile = (FileDTO<Integer, MapInfoDTO>) infoService.getInfoMap().get(infoInList.getId());
+		 //TODO a List would be better than a map, do the refactor!
+		 int mapLastId =currentInfoFile.getContend().getMap().keySet().size();
+		 InfoDTO infoDTO = new InfoDTO(); 
+		 infoDTO.setType(INFO_TYPE.TEXT);
+		 //TODO to Regionalization no crazy Strings!
+		 infoDTO.setText("Add text here");
+		 currentInfoFile.getContend().getMap().put(mapLastId+1, infoDTO);
+		 //TODO Check this part used UPDATE_IO instead of DELETE/CREATE
+		//3. Save File
+		 this.infoService.deleteFile(infoInList.getId());
+		 this.infoService.addInfoFileToSave(currentInfoFile);
+		 //4. UpdateDisplay
+		 Platform.runLater(() -> {
+			 this.editMode.setCurrentInfo(currentInfoFile);
+		 });
+	}
+
+	
+	public void deleteInfo() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteFile() {
+		// TODO Auto-generated method stub
+		
 	}
 }

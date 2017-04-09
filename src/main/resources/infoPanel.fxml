@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.InfoPanelController">
    <children>
@@ -31,8 +32,7 @@
                             <MenuItem mnemonicParsing="false" text="Image" />
                           </items>
                         </MenuButton>
-                      <Button fx:id="editButton" mnemonicParsing="false" onAction="#editInfoButton" prefHeight="70.0" prefWidth="50.0" text="Edit" />
-                        <Button fx:id="DeleteButton" mnemonicParsing="false" onAction="#deleteInfoButton" prefHeight="70.0" prefWidth="50.0" text="Delete" />
+                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteInfoButton" prefHeight="70.0" prefWidth="50.0" text="Delete" />
                     </buttons>
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
@@ -61,9 +61,12 @@
                         <ListView fx:id="infoView" prefHeight="350.0" prefWidth="202.0" />
                         <AnchorPane fx:id="infoAnchorPane" GridPane.columnIndex="1">
                            <children>
-                              <ScrollPane prefHeight="350.0" prefWidth="378.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <content>
-                                  <AnchorPane fx:id="infoDisplay" minHeight="0.0" minWidth="0.0" prefHeight="348.0" prefWidth="376.0" />
+                                  <AnchorPane fx:id="infoDisplay">
+                                       <children>
+                                          <VBox fx:id="displayVBox" alignment="CENTER" style="-fx-background-color: purple;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                                       </children></AnchorPane>
                                 </content>
                               </ScrollPane>
                            </children></AnchorPane>

@@ -5,7 +5,7 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 
-public class InfoPane {
+public class InfoPanel {
 
 	public Pane load() {
 		
