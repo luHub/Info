@@ -10,7 +10,7 @@ public class InfoInList {
 		this.id=integer;
 	}
 	
-	public Integer getId(){
+	public int getId(){
 		return this.id;
 	}
 	

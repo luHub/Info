@@ -95,11 +95,7 @@ public class InfoService<V> extends Service<V> {
 	// TODO Get Info From Files
 	public void getInfoFromFiles() {
 		synchronized (queue) {
-			// Add work to the queue
-			InfoFileOps infoFileOps = new InfoFileOps();
-			infoFileOps.setInfoFromList(this.infoForList);
-			infoFileOps.setInfoMap(this.infoMap);
-			infoFileOps.setInfoManager(this.infoManager);
+			InfoFileOps infoFileOps = prepateFileOps();
 			queue.add(infoFileOps);
 			// Notify the monitor object that all the threads
 			// are waiting on. This will awaken just one to
@@ -114,17 +110,24 @@ public class InfoService<V> extends Service<V> {
 	}
 
 	// TODO: Delete infoFile
-	public void deleteFile(int id) {
+	public void deleteFile(FileDTO<Integer, ConvertableToJSON> fileDTO) {
 		synchronized (queue) {
-			/*
-			 * QuestionFileOps questionFileOps = new QuestionFileOps();
-			 * questionFileOps.setQuestionFromList(this.questionForList);
-			 * questionFileOps.setQuestionMap(this.questionMap);
-			 * questionFileOps.setQuestionManager(this.questionManager);
-			 * questionFileOps.setQuestionIdToDelete(id);
-			 * queue.add(questionFileOps); queue.notify();
-			 */
+			//1. Prepare delete Operation
+			InfoFileOps infoFileOps = prepateFileOps();
+			infoFileOps.setFileToDelete(fileDTO);
+			//2. Add to service queue 
+			queue.add(infoFileOps);
+			//3. Notify  
+			queue.notify();
 		}
+	}
+
+	private InfoFileOps prepateFileOps() {
+		InfoFileOps infoFileOps = new InfoFileOps();
+		infoFileOps.setInfoFromList(this.infoForList);
+		infoFileOps.setInfoMap(this.infoMap);
+		infoFileOps.setInfoManager(this.infoManager);
+		return infoFileOps;
 	}
 
 	public ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> getInfoMap() {

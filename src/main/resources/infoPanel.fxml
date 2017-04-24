@@ -58,7 +58,7 @@
                         <RowConstraints prefHeight="350.0" vgrow="ALWAYS" />
                      </rowConstraints>
                      <children>
-                        <ListView fx:id="infoView" prefHeight="350.0" prefWidth="202.0" />
+                        <ListView fx:id="infoView" onMouseClicked="#onMoudeClickedList" prefHeight="350.0" prefWidth="202.0" />
                         <AnchorPane fx:id="infoAnchorPane" GridPane.columnIndex="1">
                            <children>
                               <ScrollPane fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

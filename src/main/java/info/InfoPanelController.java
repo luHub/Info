@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -43,7 +44,11 @@ public class InfoPanelController {
     private AnchorPane infoDisplay;
 	
     private MODE mode = MODE.READ; 
+    
+    private LastSelected lastSelected = LastSelected.NONE;
+    
     private InfoManager infoManager = new InfoManager(this);
+    
     
     
     private BooleanProperty isEditable = new SimpleBooleanProperty();
@@ -98,8 +103,13 @@ public class InfoPanelController {
 	@FXML
 	private void deleteInfoButton(ActionEvent event) {
 		//Continue here to delete items
-		this.infoManager.deleteInfo();
-		this.infoManager.deleteFile();
+		if(lastSelected.equals(LastSelected.LIST)){
+			System.out.println("Delete from List");
+			this.infoManager.deleteFile();
+		}else if(lastSelected.equals(LastSelected.INFO)){
+			System.out.println("Delete from Info");
+			this.infoManager.deleteInfo();
+		}
     }
 
     @FXML
@@ -171,4 +181,16 @@ public class InfoPanelController {
 	public Button getDelteButton() {
 		return deleteButton;
 	}
+
+	public void setLastSelectedINFO() {
+		lastSelected = LastSelected.INFO;
+		
+	}
+	
+	@FXML
+    void onMoudeClickedList(MouseEvent event) {
+		lastSelected = LastSelected.LIST;
+		
+    }
+	
 }

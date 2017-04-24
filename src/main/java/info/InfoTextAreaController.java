@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import model.InfoManager;
 
 public class InfoTextAreaController implements Editable {
@@ -58,6 +59,12 @@ public class InfoTextAreaController implements Editable {
 	public void onDelete() {
 		this.infoTextArea.focusedProperty().removeListener(this.onFocusListener);
 	}
+	
+	@FXML
+    void onMouseClickedTextArea(MouseEvent event) {
+		this.infoManager.getInfoPanelController().setLastSelectedINFO();
+    }
+
 	
 	
 }

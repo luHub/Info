@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import commons.flashcards.FlashCardIO;
 import commons.info.InfoIO;
-import meta.flashcardsdto.MultipleChoiceFlashCardDTO;
 import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
-import meta.working.InfoDTO;
 import meta.working.MapInfoDTO;
 
 public class InfoFileOps implements Runnable {
@@ -20,11 +17,10 @@ public class InfoFileOps implements Runnable {
 	private enum SAVE{ YES , NO,DELETE};
 	private ConcurrentHashMap<Integer, FileDTO<Integer,MapInfoDTO>> infoMap; 
 	private List<InfoInList> infoForList;
-	private FileDTO<Integer,ConvertableToJSON> infoToSave;
+	private FileDTO<Integer,ConvertableToJSON> info;
 	private SAVE save=SAVE.NO;
 	private InfoManager infoManager;
-	private int deleteId;
- 
+
 	//TODO Check Why is not accepting Override Annotation???
 	public void run() {
 		if(save.equals(SAVE.YES)){
@@ -33,7 +29,7 @@ public class InfoFileOps implements Runnable {
 		}
 		if(save.equals(SAVE.DELETE)){
 			save=SAVE.NO;
-			deleteInfo(deleteId);
+			deleteInfo();
 		}
 		updateAllInfoFromFiles();
 		
@@ -62,16 +58,20 @@ public class InfoFileOps implements Runnable {
 
 	private void saveInfo() {
 		try {
-			InfoIO.createFile(this.infoToSave);
+			InfoIO.createFile(this.info);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private void deleteInfo(int deleteId2) {
-		// TODO Auto-generated method stub
-		
+	private void deleteInfo() {
+		try {
+			InfoIO.deleteFile(this.info);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
  
 	public void setInfoFromList(List<InfoInList> infoForList) {
@@ -89,14 +89,14 @@ public class InfoFileOps implements Runnable {
 
 	public void updateInfoToFile(FileDTO<Integer, ConvertableToJSON> fileDTO) {
 		save=save.YES;
-		this.infoToSave=fileDTO;
+		this.info=fileDTO;
 		
 	}
 	 
 	
 	//TODO: Add to Ops Interface
-	public void setIdToDelete(Integer id) {
+	public void setFileToDelete(FileDTO<Integer, ConvertableToJSON> fileDTO) {
 		save=SAVE.DELETE;
-		this.deleteId=id;
+		this.info=fileDTO;
 	}	
 }

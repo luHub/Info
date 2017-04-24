@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.OptionalInt;
 
 import commons.WorkbookIO;
 import info.InfoPanelController;
@@ -104,10 +105,15 @@ public class InfoManager {
 	
 	//TODO Write Test for this method!
 	public void createNewInfoFile(){ 
-		//1 Create a new Info File:
+		//1 Create a new Info File
 		String ext ="json";
-		//2 Current info size to put proper primary Key:
-		int fileId=infoService.getInfoForList().size(); 
+		//2 Get File Last Max ID and add 1
+		 List<InfoInList> iif = infoService.getInfoForList();
+		 OptionalInt maxId = iif.stream().mapToInt(w->w.getId()).max();
+		 int fileId = 0;
+		 if(maxId.isPresent()){
+			 fileId = maxId.getAsInt()+1;
+		 }
 		//3 Config File
 		final Path INFO_PATH = Paths.get(getUser().path().toString(),"info"); 
 		MapInfoDTO mapInfoDTO = new MapInfoDTO();
@@ -179,7 +185,7 @@ public class InfoManager {
 		
 	}
 
-	public void createNewText() {
+	public void createNewText() { 
 		//1. Get CurrentInfoDTO
 		 InfoInList infoInList=this.infoListView.getSelectionModel().getSelectedItem();
 		 //2. Append a new Key Pair to its end
@@ -193,22 +199,32 @@ public class InfoManager {
 		 currentInfoFile.getContend().getMap().put(mapLastId+1, infoDTO);
 		 //TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		//3. Save File
-		 this.infoService.deleteFile(infoInList.getId());
+		 this.infoService.deleteFile(currentInfoFile);
 		 this.infoService.addInfoFileToSave(currentInfoFile);
 		 //4. UpdateDisplay
 		 Platform.runLater(() -> {
 			 this.editMode.setCurrentInfo(currentInfoFile);
 		 });
-	}
-
+	} 
+ 
 	
 	public void deleteInfo() {
-		// TODO Auto-generated method stub
-		
+		//TODO
+		//1. Select Current INFO
+		//2. Delete Current INFO via Service
+		//2.1 Inside Service Update current file positions in JSON File Order
+		//2.2 Update GUI 
 	}
 
 	public void deleteFile() {
-		// TODO Auto-generated method stub
-		
+		//1. Current File Path
+		final Path INFO_PATH = Paths.get(getUser().path().toString(),"info"); 
+		//2. Id Path
+		InfoInList infoInList=this.infoListView.getSelectionModel().getSelectedItem();
+		//3. Create FileDTO
+		FileDTO<Integer, MapInfoDTO> fileDTO = new FileDTO<>();
+		fileDTO.setId(infoInList.getId());
+		fileDTO.setPath(INFO_PATH);
+		this.infoService.deleteFile(fileDTO);
 	}
 }

@@ -19,7 +19,7 @@
             <RowConstraints minHeight="100.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextArea fx:id="infoTextArea" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextArea fx:id="infoTextArea" onMouseClicked="#onMouseClickedTextArea" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="10.0" top="10.0" />
                </GridPane.margin>
