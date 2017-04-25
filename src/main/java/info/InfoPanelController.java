@@ -151,8 +151,8 @@ public class InfoPanelController {
     private void setNewInfoButton() {
     	final int newFile = 0;
     	final int newText = 1;
-    	final int newImage = 2;
-    	final int newWeb = 3;
+    	final int newWeb = 2;
+    	final int newImage = 3;
     	
     	//TODO Disable New Text Image Web until and enable only when an INFO is selected
     	
@@ -164,6 +164,11 @@ public class InfoPanelController {
 		addInfoButton.getItems().get(newText).setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 			infoManager.createNewText();
+			}
+		});
+		addInfoButton.getItems().get(newWeb).setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+			infoManager.createNewWebView();
 			}
 		});
 		
@@ -185,12 +190,7 @@ public class InfoPanelController {
 	}
 	
 	
-	/**
-	 * When an info text is selected this method
-	 * will place last selected as INFO and
-	 * reference to last clicked info text area
-	 * @param id 
-	 */
+	
 	public void setLastSelectedINFO() {
 		lastSelected = LastSelected.INFO;
 	}

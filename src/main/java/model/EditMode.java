@@ -5,6 +5,7 @@ import java.util.HashMap;
 import info.InfoPanelController;
 import info.InfoTextAreaController;
 import info.Loader;
+import info.WebViewAreaController;
 import meta.working.FileDTO;
 import meta.working.InfoDTO;
 import meta.working.MapInfoDTO;
@@ -45,9 +46,17 @@ public class EditMode {
 			//Add Img:
 			break;
 		case WEB:
-			//Add Web:			
+			//Add Web:
+			loadWebPane(id,infoInList,infoDTO);
 			break;
 		}
+	}
+
+	private void loadWebPane(Integer id, InfoInList infoInList, InfoDTO infoDTO) {
+		// TODO Auto-generated method stub
+		Loader loader = new Loader();
+		WebViewAreaController itac = loader.addWebArea(this.infoManager.getInfoPanelController().getDisplayVBox(),infoManager);
+		itac.setInfoDTO(id,infoInList, infoDTO);
 	}
 
 	private void loadTextPane(Integer id, InfoInList infoInList,final InfoDTO infoDTO) {
@@ -56,6 +65,3 @@ public class EditMode {
 		itac.setInfoDTO(id,infoInList, infoDTO);
 	}		
 }
-
-
-

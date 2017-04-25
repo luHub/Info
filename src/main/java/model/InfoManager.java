@@ -257,5 +257,28 @@ public class InfoManager {
 				//TODO use a beter way to do this if possible
 				 this.infoService.deleteFile(currentInfoFile);
 				 this.infoService.addInfoFileToSave(currentInfoFile);
+	} 
+
+	public void createNewWebView() {
+		// TODO Auto-generated method stub
+		//1. Get CurrentInfoDTO
+		 InfoInList infoInList=this.infoListView.getSelectionModel().getSelectedItem();
+		 //2. Append a new Key Pair to its end
+		 FileDTO<Integer, MapInfoDTO> currentInfoFile = (FileDTO<Integer, MapInfoDTO>) infoService.getInfoMap().get(infoInList.getId());
+		 //TODO a List would be better than a map, do the refactor!
+		 int mapLastId =currentInfoFile.getContend().getMap().keySet().size();
+		 InfoDTO infoDTO = new InfoDTO(); 
+		 infoDTO.setType(INFO_TYPE.WEB);
+		 //TODO add a default no connection web page
+		 infoDTO.setText("https://www.google.com");
+		 currentInfoFile.getContend().getMap().put(mapLastId+1, infoDTO);
+		 //TODO Check this part used UPDATE_IO instead of DELETE/CREATE
+		//3. Save File
+		 this.infoService.deleteFile(currentInfoFile);
+		 this.infoService.addInfoFileToSave(currentInfoFile);
+		 //4. UpdateDisplay
+		 Platform.runLater(() -> {
+			 this.editMode.setCurrentInfo(currentInfoFile);
+		 });
 	}
 }

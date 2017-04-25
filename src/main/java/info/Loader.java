@@ -29,4 +29,22 @@ public class Loader {
 		return infoTextAreaController;
 	}
 
+	public WebViewAreaController addWebArea(VBox parent, InfoManager infoManager) {
+		WebViewAreaController webAreaController=null;
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/WebViewArea.fxml"));
+			Node node = loader.load();
+			AnchorPane.setBottomAnchor(node, 0d);
+			AnchorPane.setTopAnchor(node, 0d);
+			AnchorPane.setLeftAnchor(node, 0d);
+			AnchorPane.setRightAnchor(node, 0d);
+			parent.getChildren().add(node);
+			webAreaController = loader.<WebViewAreaController>getController();
+			webAreaController.setInfoManager(infoManager);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return webAreaController;
+	}
+
 }
