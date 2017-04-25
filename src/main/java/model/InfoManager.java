@@ -186,6 +186,7 @@ public class InfoManager {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	public void createNewText() { 
 		//1. Get CurrentInfoDTO
@@ -208,7 +209,6 @@ public class InfoManager {
 			 this.editMode.setCurrentInfo(currentInfoFile);
 		 });
 	} 
- 
 	
 	public void deleteInfo() {
 		if(lastInfoIdSelected !=null && lastInfoInListSelected != null){
@@ -218,6 +218,7 @@ public class InfoManager {
 		// 2. Remove Info
 		currentInfoFile.getContend().getMap().remove(lastInfoIdSelected);
 		// 3. Update FileDTO
+		//TODO use a beter way to do this if possible
 		 this.infoService.deleteFile(currentInfoFile);
 		 this.infoService.addInfoFileToSave(currentInfoFile);
 		//4. UpdateDisplay
@@ -244,5 +245,17 @@ public class InfoManager {
 	public void setLastInfoSelected(Integer id,InfoInList infoInList) {
 		this.lastInfoIdSelected= id;
 		this.lastInfoInListSelected = infoInList;
+	}
+
+	public void updateInfo(Integer id, InfoInList infoInList, InfoDTO infoDTO) {
+		// 1. Get FileDTO
+				FileDTO<Integer, MapInfoDTO> currentInfoFile = (FileDTO<Integer, MapInfoDTO>) infoService.getInfoMap()
+						.get(infoInList.getId());
+				// 2. Remove Info
+				currentInfoFile.getContend().getMap().get(id).setText(infoDTO.getText());
+				// 3. Update FileDTO
+				//TODO use a beter way to do this if possible
+				 this.infoService.deleteFile(currentInfoFile);
+				 this.infoService.addInfoFileToSave(currentInfoFile);
 	}
 }

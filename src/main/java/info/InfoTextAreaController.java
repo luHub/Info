@@ -2,21 +2,22 @@ package info;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import meta.working.InfoDTO;
+import model.Autosave;
 import model.InfoInList;
 import model.InfoManager;
 
 public class InfoTextAreaController implements Editable {
-
+	
 	private InfoManager infoManager;
 	private ChangeListener<Boolean> onFocusListener;
 	private Integer id;
 	
+	private Autosave autosave = new Autosave();
+		
     @FXML
     private TextArea infoTextArea;
     
@@ -41,6 +42,16 @@ public class InfoTextAreaController implements Editable {
 			}
 		};
 		this.infoTextArea.focusedProperty().addListener(this.onFocusListener);
+		
+		
+		this.infoTextArea.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				autosave.run(newValue,infoManager,id,infoInList);
+			}
+		});		
 	} 
 
 	public void setInfoDTO(Integer textId,InfoInList infoInList, InfoDTO infoDTO) {
@@ -72,7 +83,4 @@ public class InfoTextAreaController implements Editable {
 		this.infoManager.getInfoPanelController().setLastSelectedINFO();
 		this.infoManager.setLastInfoSelected(this.id,this.infoInList);
     }
-
-	
-	
 }

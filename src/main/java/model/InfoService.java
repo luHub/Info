@@ -133,10 +133,4 @@ public class InfoService<V> extends Service<V> {
 	public ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> getInfoMap() {
 		return infoMap;
 	}
-
-	public void deleteInfo(Integer lastInfoIdSelected) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
