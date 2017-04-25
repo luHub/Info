@@ -228,7 +228,7 @@ public class InfoManager {
 		this.lastInfoIdSelected = null;
 		this.lastInfoInListSelected = null;
 		}
-	}
+	} 
 
 	public void deleteFile() {
 		//1. Current File Path
