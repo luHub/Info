@@ -7,15 +7,20 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import meta.working.InfoDTO;
+import model.InfoInList;
 import model.InfoManager;
 
 public class InfoTextAreaController implements Editable {
 
 	private InfoManager infoManager;
 	private ChangeListener<Boolean> onFocusListener;
+	private Integer id;
 	
     @FXML
     private TextArea infoTextArea;
+    
+	private InfoInList infoInList;
 
 	public TextArea getInfoTextArea() {
 		return infoTextArea;
@@ -38,8 +43,10 @@ public class InfoTextAreaController implements Editable {
 		this.infoTextArea.focusedProperty().addListener(this.onFocusListener);
 	} 
 
-	public void setText(String text) {
-		this.infoTextArea.setText(text);
+	public void setInfoDTO(Integer textId,InfoInList infoInList, InfoDTO infoDTO) {
+		this.infoTextArea.setText(infoDTO.getText());
+		this.infoInList=infoInList;
+		this.id=textId;
 	}
 
 
@@ -61,8 +68,9 @@ public class InfoTextAreaController implements Editable {
 	}
 	
 	@FXML
-    void onMouseClickedTextArea(MouseEvent event) {
+    void onMouseClickedTextArea(MouseEvent event) { 
 		this.infoManager.getInfoPanelController().setLastSelectedINFO();
+		this.infoManager.setLastInfoSelected(this.id,this.infoInList);
     }
 
 	

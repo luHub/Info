@@ -101,6 +101,8 @@ public class InfoManager {
 	
 	//Creates a concurrent Map and be careful
 	private InfoService infoService = new InfoService();
+	private Integer lastInfoIdSelected;
+	private InfoInList lastInfoInListSelected;
 	
 	
 	//TODO Write Test for this method!
@@ -209,11 +211,22 @@ public class InfoManager {
  
 	
 	public void deleteInfo() {
-		//TODO
-		//1. Select Current INFO
-		//2. Delete Current INFO via Service
-		//2.1 Inside Service Update current file positions in JSON File Order
-		//2.2 Update GUI 
+		if(lastInfoIdSelected !=null && lastInfoInListSelected != null){
+		// 1. Get FileDTO
+		FileDTO<Integer, MapInfoDTO> currentInfoFile = (FileDTO<Integer, MapInfoDTO>) infoService.getInfoMap()
+				.get(lastInfoInListSelected.getId());
+		// 2. Remove Info
+		currentInfoFile.getContend().getMap().remove(lastInfoIdSelected);
+		// 3. Update FileDTO
+		 this.infoService.deleteFile(currentInfoFile);
+		 this.infoService.addInfoFileToSave(currentInfoFile);
+		//4. UpdateDisplay
+		 Platform.runLater(() -> {
+			 this.editMode.setCurrentInfo(currentInfoFile);
+		 });
+		this.lastInfoIdSelected = null;
+		this.lastInfoInListSelected = null;
+		}
 	}
 
 	public void deleteFile() {
@@ -226,5 +239,10 @@ public class InfoManager {
 		fileDTO.setId(infoInList.getId());
 		fileDTO.setPath(INFO_PATH);
 		this.infoService.deleteFile(fileDTO);
+	}
+
+	public void setLastInfoSelected(Integer id,InfoInList infoInList) {
+		this.lastInfoIdSelected= id;
+		this.lastInfoInListSelected = infoInList;
 	}
 }

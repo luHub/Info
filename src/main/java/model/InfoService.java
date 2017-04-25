@@ -134,4 +134,9 @@ public class InfoService<V> extends Service<V> {
 		return infoMap;
 	}
 
+	public void deleteInfo(Integer lastInfoIdSelected) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

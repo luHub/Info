@@ -52,6 +52,8 @@ public class InfoPanelController {
     
     
     private BooleanProperty isEditable = new SimpleBooleanProperty();
+
+
     
     @FXML
     private void initialize(){
@@ -181,10 +183,16 @@ public class InfoPanelController {
 	public Button getDelteButton() {
 		return deleteButton;
 	}
-
+	
+	
+	/**
+	 * When an info text is selected this method
+	 * will place last selected as INFO and
+	 * reference to last clicked info text area
+	 * @param id 
+	 */
 	public void setLastSelectedINFO() {
 		lastSelected = LastSelected.INFO;
-		
 	}
 	
 	@FXML
