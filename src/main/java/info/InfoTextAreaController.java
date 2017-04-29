@@ -6,30 +6,41 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import meta.working.InfoDTO;
+import meta.working.InfoLayoutDTO;
 import model.Autosave;
 import model.InfoInList;
 import model.InfoManager;
+import util.InfoLayout;
 
 public class InfoTextAreaController implements Editable {
 	
 	private InfoManager infoManager;
 	private ChangeListener<Boolean> onFocusListener;
+	
+	//InfoId and TextAreaId
+	private InfoInList infoInList;
 	private Integer id;
+	
+	
 	
 	private Autosave autosave = new Autosave();
 		
     @FXML
     private TextArea infoTextArea;
     
-	private InfoInList infoInList;
+	
 
 	public TextArea getInfoTextArea() {
-		return infoTextArea;
+		return infoTextArea; 
 	}
 
 	public void setInfoManager(InfoManager infoManager) {
 		this.infoManager = infoManager;
+		
+		
 		this.infoTextArea.editableProperty().bind(this.infoManager.getInfoPanelController().getIsEditable());
+		
+		
 		
 		this.onFocusListener =new ChangeListener<Boolean>() {
 			@Override
@@ -51,13 +62,21 @@ public class InfoTextAreaController implements Editable {
 				// TODO Auto-generated method stub
 				autosave.run(newValue,infoManager,id,infoInList);
 			}
-		});		
+		});	
+		
+		
+		
+		
 	} 
 
 	public void setInfoDTO(Integer textId,InfoInList infoInList, InfoDTO infoDTO) {
 		this.infoTextArea.setText(infoDTO.getText());
 		this.infoInList=infoInList;
 		this.id=textId;
+		
+		final InfoLayoutDTO infoLayotDTO = this.infoManager.readInfoLayoutDTO(id,infoInList);
+		infoTextArea.setMinHeight(infoLayotDTO.getHeight());
+		InfoLayout.resize(infoTextArea,infoManager,infoLayotDTO);
 	}
 
 
@@ -82,5 +101,9 @@ public class InfoTextAreaController implements Editable {
     void onMouseClickedTextArea(MouseEvent event) { 
 		this.infoManager.getInfoPanelController().setLastSelectedINFO();
 		this.infoManager.setLastInfoSelected(this.id,this.infoInList);
+		System.out.println("test111");
     }
+	
+	
+	
 }

@@ -2,21 +2,34 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
+
+import javax.security.auth.x500.X500Principal;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
 import meta.working.InfoDTO;
+import meta.working.InfoLayoutDTO;
+import meta.working.InfoLayoutListDTO;
 import meta.working.MapInfoDTO;
 
+
+//TODO Refactor to generic 
+//TODO Change Lists to Sets
+//TODO Reduce Code as much as possible to make it generic as possible
 public class InfoService<V> extends Service<V> {
 
 	private final ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> infoMap = new ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>>();
-	protected final Queue<InfoFileOps> queue = new ConcurrentLinkedQueue();
+	
+	private final FileDTO<Integer, InfoLayoutListDTO> layoutFile =  new FileDTO<Integer, InfoLayoutListDTO>();
+	
+	protected final Queue<InfoQueuebale> queue = new ConcurrentLinkedQueue();
 	private final List<InfoInList> infoForList = new ArrayList();
 	private InfoManager infoManager;
 
@@ -28,8 +41,8 @@ public class InfoService<V> extends Service<V> {
 			@Override
 			protected V call() throws Exception {
 				while (true) {
-					try {
-						InfoFileOps questionFileOps = null;
+					try { 
+						InfoQueuebale questionFileOps = null;
 						synchronized (queue) {
 							while (queue.isEmpty()) {
 								queue.wait();
@@ -91,6 +104,23 @@ public class InfoService<V> extends Service<V> {
 			queue.notify();
 		}
 	}
+	
+	public void addInfoLayoutToSave(InfoLayoutDTO infoLayotDTO) {
+		synchronized (queue) {
+			//TODO FIX ALL THIS
+			InfoLayoutFileOps infoLayoutFileOps = prepareLayoutFileOps();
+			
+			final List<InfoLayoutDTO> layoutDTO = this.layoutFile.getContend().getInfoLayoutList().stream()
+					.filter(x -> (x.getInfoFileId().equals(infoLayotDTO.getInfoFileId())
+				&& x.getInfoId().equals(infoLayotDTO.getInfoId()))).collect(Collectors.toList());
+			
+			this.layoutFile.getContend().getInfoLayoutList().removeAll(layoutDTO);
+			this.layoutFile.getContend().getInfoLayoutList().add(infoLayotDTO);
+			infoLayoutFileOps.updateInfoToFile(this.layoutFile);
+			queue.add(infoLayoutFileOps);
+			queue.notify();
+		}
+	}
 
 	// TODO Get Info From Files
 	public void getInfoFromFiles() {
@@ -100,6 +130,14 @@ public class InfoService<V> extends Service<V> {
 			// Notify the monitor object that all the threads
 			// are waiting on. This will awaken just one to
 			// begin processing work from the queue
+			queue.notify();
+		}
+	}
+	
+	public void getLayoutFromFile(){
+		synchronized (queue) {
+			InfoLayoutFileOps infoFileOps = prepareLayoutFileOps();
+			queue.add(infoFileOps);
 			queue.notify();
 		}
 	}
@@ -129,8 +167,22 @@ public class InfoService<V> extends Service<V> {
 		infoFileOps.setInfoManager(this.infoManager);
 		return infoFileOps;
 	}
+	
+	private InfoLayoutFileOps prepareLayoutFileOps(){
+		InfoLayoutFileOps infoLayoutFileOps = new InfoLayoutFileOps();
+		infoLayoutFileOps.setInfoManager(this.infoManager);
+		infoLayoutFileOps.setLayoutFile(this.layoutFile);
+		return infoLayoutFileOps; 
+			
+	}
 
 	public ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> getInfoMap() {
 		return infoMap;
 	}
+
+	public FileDTO<Integer, InfoLayoutListDTO> getLayoutInfo() {
+		return this.layoutFile;
+	}
+
+	
 }

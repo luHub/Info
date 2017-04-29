@@ -7,18 +7,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import meta.working.InfoDTO;
+import meta.working.InfoLayoutDTO;
 import model.Autosave;
 import model.InfoInList;
 import model.InfoManager;
+import util.InfoLayout;
 
 public class WebViewAreaController implements Editable {
  	
 	private InfoManager infoManager;
 	private InfoInList infoInList;
 	private Integer id;
+	
+	@FXML
+	private GridPane webViewGridPane;
 
     @FXML
     private WebView webViewArea;
@@ -36,14 +43,13 @@ public class WebViewAreaController implements Editable {
    	 	webEngine.load(infoDTO.getText());
    	 	urlTextField.setText(infoDTO.getText());
    	 	
-   	 	
-	
-   	
+   	 	InfoLayoutDTO infoLayoutDTO = this.infoManager.readInfoLayoutDTO(id, infoInList);
+		this.webViewGridPane.setMinHeight(  infoLayoutDTO.getHeight());
+		InfoLayout.resize(webViewGridPane,infoManager,infoLayoutDTO);
 	} 
 
-
 	public void setInfoManager(InfoManager infoManager) {
-		// TODO Auto-generated method stub
+		
 		this.infoManager = infoManager;
 		this.urlTextField.editableProperty().bind(this.infoManager.getInfoPanelController().getIsEditable());
 		

@@ -9,9 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import commons.info.InfoIO;
 import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
+import meta.working.InfoLayoutListDTO;
 import meta.working.MapInfoDTO;
 
-public class InfoFileOps implements Runnable {
+public class InfoFileOps implements InfoQueuebale {
 	
 
 	private enum SAVE{ YES , NO,DELETE};
@@ -98,5 +99,5 @@ public class InfoFileOps implements Runnable {
 	public void setFileToDelete(FileDTO<Integer, ConvertableToJSON> fileDTO) {
 		save=SAVE.DELETE;
 		this.info=fileDTO;
-	}	
+	}
 }

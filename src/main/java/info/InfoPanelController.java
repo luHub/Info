@@ -24,7 +24,6 @@ public class InfoPanelController {
 	@FXML
     private Button ModeButton;
 
-   
     @FXML
     private MenuButton addInfoButton;
 
@@ -48,8 +47,6 @@ public class InfoPanelController {
     private LastSelected lastSelected = LastSelected.NONE;
     
     private InfoManager infoManager = new InfoManager(this);
-    
-    
     
     private BooleanProperty isEditable = new SimpleBooleanProperty();
 
@@ -171,8 +168,6 @@ public class InfoPanelController {
 			infoManager.createNewWebView();
 			}
 		});
-		
-		
 	}
 
 	public VBox getDisplayVBox() {

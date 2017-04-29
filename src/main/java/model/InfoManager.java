@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 import commons.WorkbookIO;
@@ -18,12 +19,15 @@ import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
 import meta.working.INFO_TYPE;
 import meta.working.InfoDTO;
+import meta.working.InfoLayoutDTO;
+import meta.working.InfoLayoutListDTO;
 import meta.working.MapInfoDTO;
 import user.User;
 
 public class InfoManager {
 	
 	//TODO: Wire this to Workbook, IOC, or something like that.
+	private final String layoutConfig = "layoutConfig.json"; 
 	private User user;
 	private boolean isModule=true;
 	private MODE mode;	
@@ -61,20 +65,7 @@ public class InfoManager {
 			//2. Display it on the Info Pane
 			//TODO Add EDIT and READ MODE
 			InfoManager.this.editMode.setCurrentInfo(currentInfoFile);
-			
-			 
-			// Set StudyModeManagerView
-//			if(newValue!=null){
-//			Integer questionId = newValue.getId();
-//			MultipleChoiceFlashCardDTO currentQuestion = (MultipleChoiceFlashCardDTO) questionService.getQuestionMap()
-//					.get(questionId);
-//			QuestionManager.this.currentQuestion = currentQuestion;
-//			if (mode.equals(MODE.STUDY)) {
-//				QuestionManager.this.studyModeManager.setCurrentQuestion(currentQuestion);
-//			} else if (mode.equals(MODE.CREATE)) {
-//				QuestionManager.this.creatorModeManager.setCurrentQuesion();
-//			}
-//		}
+
 			}
 	};
 	
@@ -134,6 +125,7 @@ public class InfoManager {
 		this.infoService.setInfoManager(this);
 		this.infoService.start();
 		this.infoService.getInfoFromFiles();
+		this.infoService.getLayoutFromFile();
 	}
 	
 
@@ -142,8 +134,15 @@ public class InfoManager {
 			infoListView.getSelectionModel().selectedItemProperty().removeListener(managerListener);
 			List<InfoInList> info = infoService.getInfoForList();
 			ObservableList<InfoInList> ol = FXCollections.observableList(info);
+			
+			if(info.isEmpty()){
+				infoPanelController.getDelteButton().setDisable(true);
+				infoPanelController.getDisplayVBox().getChildren().clear(); 
+			}
+			
 			infoListView.setItems(ol); 
 			infoListView.getSelectionModel().selectedItemProperty().addListener(managerListener);
+			
 //			// TODO not use this null comparison
 //			if (currentQuestion == null) {
 //				questionListView.getSelectionModel().selectFirst();
@@ -172,6 +171,10 @@ public class InfoManager {
 
 	public Path getInfoPath() {
 		return Paths.get(user.path().toString(),"info");
+	}
+	
+	public Path getLayoutConfigPath(){
+		return Paths.get(user.path().toString(),layoutConfig);
 	}
 
 	public InfoPanelController getInfoPanelController() {
@@ -240,7 +243,7 @@ public class InfoManager {
 		fileDTO.setId(infoInList.getId());
 		fileDTO.setPath(INFO_PATH);
 		this.infoService.deleteFile(fileDTO);
-	}
+	} 
 
 	public void setLastInfoSelected(Integer id,InfoInList infoInList) {
 		this.lastInfoIdSelected= id;
@@ -280,5 +283,28 @@ public class InfoManager {
 		 Platform.runLater(() -> {
 			 this.editMode.setCurrentInfo(currentInfoFile);
 		 });
+	} 
+	
+	//Layout Config if this scales to much use another class:
+	public InfoLayoutDTO readInfoLayoutDTO(Integer id, InfoInList infoInList) {
+		
+		final double heightDefault = 30.0;
+		
+		InfoLayoutDTO infoLayoutDTO = new InfoLayoutDTO();
+		infoLayoutDTO.setInfoId(id);
+		infoLayoutDTO.setInfoFileId(infoInList.getId());
+		infoLayoutDTO.setHeight(heightDefault);
+		FileDTO<Integer, InfoLayoutListDTO> layoutFile = infoService.getLayoutInfo();
+		
+		Optional<InfoLayoutDTO> optInfoLayoutDTO = layoutFile.getContend().getInfoLayoutList()
+		.stream().filter(x->x.getInfoFileId().equals(infoInList.getId())&&x.getInfoId().equals(id)).findFirst();
+		
+		return optInfoLayoutDTO.isPresent() ? optInfoLayoutDTO.get() : infoLayoutDTO;
+
+	}
+
+	public void updateInfoLayoutDTO(InfoLayoutDTO infoLayotDTO) {
+		
+		this.infoService.addInfoLayoutToSave(infoLayotDTO);
 	}
 }

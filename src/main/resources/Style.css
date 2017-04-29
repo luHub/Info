@@ -1,5 +1,8 @@
 .text-area{
 	-fx-font: 16px "System";
+	-fx-border-color:grey;
+	-fx-border-width:5px; 
+	
 } 
 .text-field{
 	-fx-font: 16px "System";
@@ -10,9 +13,20 @@
 .button{
 	-fx-font: 14px "System";
 }
+.menu-button{
+	-fx-font: 14px "System";	
+}
 .label{
 	-fx-font: 16px "System";
 }
 .checkbox{
 	-fx-font: 16px "System";
 }
+.menu-item .label {
+    -fx-text-fill: black;
+    -fx-font: 16px "System"; 
+    -fx-min-width:40px;   
+}
+.context-menu {
+    -fx-min-width:100px;
+} 
