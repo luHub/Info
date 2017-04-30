@@ -10,6 +10,7 @@ import meta.working.InfoLayoutDTO;
 import model.Autosave;
 import model.InfoInList;
 import model.InfoManager;
+import util.Filters;
 import util.InfoLayout;
 
 public class InfoTextAreaController implements Editable {
@@ -60,7 +61,14 @@ public class InfoTextAreaController implements Editable {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
+				System.out.println("Value: "+newValue+"is valid:"+Filters.isStringValid(newValue));
+				if(Filters.isStringValid(newValue)){
 				autosave.run(newValue,infoManager,id,infoInList);
+				infoTextArea.setStyle("-fx-text-fill:black;");
+				}else
+				{ 
+				infoTextArea.setStyle("-fx-text-fill:red;");
+				}
 			}
 		});	
 		

@@ -24,6 +24,7 @@ import meta.working.InfoLayoutListDTO;
 import meta.working.MapInfoDTO;
 import user.User;
 
+//TODO Make all Managers Generics!
 public class InfoManager {
 	
 	//TODO: Wire this to Workbook, IOC, or something like that.
