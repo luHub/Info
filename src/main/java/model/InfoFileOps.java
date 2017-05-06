@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import commons.info.InfoIO;
 import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
-import meta.working.InfoLayoutListDTO;
+import meta.working.InfoIndexDTO;
 import meta.working.MapInfoDTO;
 
 public class InfoFileOps implements InfoQueuebale {
@@ -48,10 +48,9 @@ public class InfoFileOps implements InfoQueuebale {
 		} 
 		this.infoMap.putAll(infoMap);
 		this.infoForList.clear();
-		infoMap.forEach((k,v)->{ 
-			InfoInList infoListItem = new InfoInList();
-			infoListItem.setId(v.getId());
-			infoListItem.setTitle(v.getContend().getTitle());
+		infoMap.forEach((k,v)->{
+			InfoInList infoListItem = new InfoInList(new InfoIndexDTO(v.getId()));
+			infoListItem.setInfoManager(infoManager);
 			this.infoForList.add(infoListItem);
 		});
 		  infoManager.updateUI();

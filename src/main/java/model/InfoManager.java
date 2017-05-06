@@ -21,6 +21,7 @@ import meta.working.INFO_TYPE;
 import meta.working.InfoDTO;
 import meta.working.InfoLayoutDTO;
 import meta.working.InfoLayoutListDTO;
+import meta.working.InfoIndexDTO;
 import meta.working.MapInfoDTO;
 import user.User;
 
@@ -35,7 +36,7 @@ public class InfoManager {
 	private final  EditMode editMode = new EditMode(this);
 	private ReadMode readMode;
 	private ListView<InfoInList> infoListView;
-	private final String INFO = "info";
+	
 	
 	
 	private InfoPanelController infoPanelController;
@@ -52,9 +53,14 @@ public class InfoManager {
 		initializeInfoService();
 	}
 	
-	public void setInfoListView(ListView<InfoInList> infoListView) {
-		this.infoListView=infoListView;
+	public void setInfoListView(ListView<InfoInList> infoView) {
+		this.infoListView=infoView;
 	}
+	
+	public ListView<InfoInList> getInfoListView(){
+		return this.infoListView;
+	}
+	
 	
 	private ChangeListener<InfoInList> managerListener = new ChangeListener<InfoInList>() {
 		public void changed(ObservableValue<? extends InfoInList> observable, InfoInList oldValue,
@@ -307,5 +313,9 @@ public class InfoManager {
 	public void updateInfoLayoutDTO(InfoLayoutDTO infoLayotDTO) {
 		
 		this.infoService.addInfoLayoutToSave(infoLayotDTO);
+	}
+
+	public void updateInfoDetails(FileDTO<Integer, InfoIndexDTO> infoDTO) {
+		
 	}
 }

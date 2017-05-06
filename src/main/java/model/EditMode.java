@@ -8,6 +8,7 @@ import info.Loader;
 import info.WebViewAreaController;
 import meta.working.FileDTO;
 import meta.working.InfoDTO;
+import meta.working.InfoIndexDTO;
 import meta.working.MapInfoDTO;
 
 public class EditMode { 
@@ -22,8 +23,7 @@ public class EditMode {
 		//1. Clear Info Pane
 		clearInfoPane();
 		//2. Display Information File
-		InfoInList infoInList = new InfoInList();
-		infoInList.setId(currentInfoFile.getId());
+		InfoInList infoInList = new InfoInList(new InfoIndexDTO(currentInfoFile.getId()));
 		addInfoToPane(currentInfoFile.getContend(),infoInList);
 	}
 	

@@ -1,14 +1,25 @@
 package model;
 
+import info.InfoCellController;
+import info.Loader;
+import javafx.scene.Node;
+import meta.working.InfoIndexDTO;
 
 public class InfoInList {
-
+	
+	private InfoCellController infoCell;
+	private InfoIndexDTO infoIndexDTO;
+	private Loader loader = new Loader();
+	
 	private Integer id;
 	private String title;
+	private InfoManager infoManager;
 	
-	public void setId(Integer integer) {
-		this.id=integer;
+	public InfoInList(final InfoIndexDTO infoIndexDTO){
+		this.infoIndexDTO=infoIndexDTO;
+		this.id=infoIndexDTO.getInfoFileId();
 	}
+	
 	
 	public int getId(){
 		return this.id;
@@ -53,7 +64,14 @@ public class InfoInList {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+	public Node getInfoNode() {
+		this.infoCell = loader.addInfoCell();
+		this.infoCell.initialize(infoManager,infoIndexDTO,this);
+		return this.infoCell.getInfoCellView();
+	}
+
+	public void setInfoManager(InfoManager infoManager) {
+		this.infoManager=infoManager;
+	}
 }

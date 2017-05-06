@@ -80,17 +80,15 @@ public class InfoPanelController {
                     protected void updateItem(InfoInList t, boolean bln) {
                         super.updateItem(t, bln);
                         if (t != null) {
-                            setText(t.toString());
+                        	setGraphic(t.getInfoNode());
                         }else{
-                        	//When deleting
-                        	setText("");
+                        	setGraphic(null);
                         }
                     }
 				};
 				return myQuestion;
 			}
 		});
-    	
     }
 
 	private void initializeInfoManager() {

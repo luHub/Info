@@ -9,6 +9,23 @@ import javafx.scene.layout.VBox;
 import model.InfoManager;
 
 public class Loader {
+	
+	public InfoCellController addInfoCell(){
+		InfoCellController infoCellController = null;
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/infoCell.fxml"));
+			Node node = loader.load();
+			AnchorPane.setBottomAnchor(node, 0d);
+			AnchorPane.setTopAnchor(node, 0d);
+			AnchorPane.setLeftAnchor(node, 0d);
+			AnchorPane.setRightAnchor(node, 0d);
+			infoCellController = loader.<InfoCellController>getController();
+			infoCellController.setInfoCellView(node);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return infoCellController;
+	}
 
 	
 	public  InfoTextAreaController addTextArea(VBox parent,InfoManager infoManager){
