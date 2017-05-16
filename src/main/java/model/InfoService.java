@@ -110,7 +110,7 @@ public class InfoService<V> extends Service<V> {
 			// are waiting on. This will awaken just one to
 			// begin processing work from the queue
 			queue.notify();
-		}
+		} 
 		//TODO Refactor dirty fix
 		if(!isUpdate){
 		synchronized (queue) {

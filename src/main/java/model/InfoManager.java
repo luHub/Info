@@ -195,8 +195,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().put(mapLastId + 1, infoDTO);
 		// TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		// 3. Save File
-		this.infoService.deleteFile(currentInfoFile,false);
-		this.infoService.addInfoFileToSave(currentInfoFile,false);
+		this.infoService.deleteFile(currentInfoFile,true);
+		this.infoService.addInfoFileToSave(currentInfoFile,true);
 		// 4. UpdateDisplay
 		Platform.runLater(() -> {
 			this.editMode.setCurrentInfo(currentInfoFile);
@@ -212,8 +212,8 @@ public class InfoManager {
 			currentInfoFile.getContend().getMap().remove(lastInfoIdSelected);
 			// 3. Update FileDTO
 			// TODO use a beter way to do this if possible
-			this.infoService.deleteFile(currentInfoFile,false);
-			this.infoService.addInfoFileToSave(currentInfoFile,false);
+			this.infoService.deleteFile(currentInfoFile,true);
+			this.infoService.addInfoFileToSave(currentInfoFile,true);
 			// 4. UpdateDisplay
 			Platform.runLater(() -> {
 				this.editMode.setCurrentInfo(currentInfoFile);
@@ -268,8 +268,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().put(mapLastId + 1, infoDTO);
 		// TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		// 3. Save File
-		this.infoService.deleteFile(currentInfoFile,false);
-		this.infoService.addInfoFileToSave(currentInfoFile,false);
+		this.infoService.deleteFile(currentInfoFile,true);
+		this.infoService.addInfoFileToSave(currentInfoFile,true);
 		// 4. UpdateDisplay
 		Platform.runLater(() -> {
 			this.editMode.setCurrentInfo(currentInfoFile);
@@ -327,9 +327,6 @@ public class InfoManager {
 			this.infoService.getInfoForList().addAll(info);
 			infoListView.setItems(ol);
 			infoListView.getSelectionModel().selectedItemProperty().addListener(managerListener);
-
-			// NO!
-			//infoListView.getItems().stream().forEach(x -> x.getInfoCellController().activateListener());
 		});
 	}
 }

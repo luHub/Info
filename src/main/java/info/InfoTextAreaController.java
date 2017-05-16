@@ -61,7 +61,6 @@ public class InfoTextAreaController implements Editable {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				System.out.println("Value: "+newValue+"is valid:"+Filters.isStringValid(newValue));
 				if(Filters.isStringValid(newValue)){
 				autosave.run(newValue,infoManager,id,infoInList);
 				infoTextArea.setStyle("-fx-text-fill:black;");
@@ -109,8 +108,7 @@ public class InfoTextAreaController implements Editable {
     void onMouseClickedTextArea(MouseEvent event) { 
 		this.infoManager.getInfoPanelController().setLastSelectedINFO();
 		this.infoManager.setLastInfoSelected(this.id,this.infoInList);
-		System.out.println("test111");
-    }
+	}
 	
 	
 	

@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,11 @@ public class InfoPanelController {
     
     private BooleanProperty isEditable = new SimpleBooleanProperty();
 
+    
+    final int newFile = 0;
+	final int newText = 1;
+	final int newWeb = 2;
+	final int newImage = 3;
 
     
     @FXML
@@ -58,6 +64,8 @@ public class InfoPanelController {
     	setNewInfoButton();
     	initializeInfoManager();
     	
+		addInfoButton.getItems().get(InfoPanelController.this.newText).setDisable(true);
+		addInfoButton.getItems().get(InfoPanelController.this.newWeb).setDisable(true);
     	
     	this.infoView.focusedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -100,10 +108,8 @@ public class InfoPanelController {
 	private void deleteInfoButton(ActionEvent event) {
 		//Continue here to delete items
 		if(lastSelected.equals(LastSelected.LIST)){ 
-			System.out.println("Delete from List");
 			this.infoManager.deleteFile();
 		}else if(lastSelected.equals(LastSelected.INFO)){
-			System.out.println("Delete from Info");
 			this.infoManager.deleteInfo();
 		}
     }
@@ -143,12 +149,23 @@ public class InfoPanelController {
     
     
     private void setNewInfoButton() {
-    	final int newFile = 0;
-    	final int newText = 1;
-    	final int newWeb = 2;
-    	final int newImage = 3;
     	
-    	//TODO Disable New Text Image Web until and enable only when an INFO is selected
+    	//TODO FIX this for general purpouse (MOuse, keyboard,touch,etc)
+    	addInfoButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+    		@Override
+			public void handle(MouseEvent event) {
+			if(infoView.getSelectionModel().getSelectedItem()==null){
+				addInfoButton.getItems().get(InfoPanelController.this.newText).setDisable(true);
+				addInfoButton.getItems().get(InfoPanelController.this.newWeb).setDisable(true);
+			}
+			else
+			{
+				addInfoButton.getItems().get(InfoPanelController.this.newText).setDisable(false);
+				addInfoButton.getItems().get(InfoPanelController.this.newWeb).setDisable(false);
+			}
+    		}
+    	});
+
     	
 		addInfoButton.getItems().get(newFile).setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {

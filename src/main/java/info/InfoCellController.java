@@ -48,6 +48,7 @@ public class InfoCellController {
 		//After text is setted activate listener to persist Titles
 		activateListener();
 		// this.infoManager.getInfoListView().getSelectionModel().select(obj);
+		
 	}
 
 	public void setInfoCellView(Node node) {
