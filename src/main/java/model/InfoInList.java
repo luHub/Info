@@ -11,37 +11,57 @@ public class InfoInList {
 	private InfoIndexDTO infoIndexDTO;
 	private Loader loader = new Loader();
 	
-	private Integer id;
-	private String title;
 	private InfoManager infoManager;
 	
 	public InfoInList(final InfoIndexDTO infoIndexDTO){
 		this.infoIndexDTO=infoIndexDTO;
-		this.id=infoIndexDTO.getInfoFileId();
+		this.infoCell = loader.addInfoCell();
 	}
 	
-	
 	public int getId(){
-		return this.id;
+		return this.infoIndexDTO.getInfoFileId();
+	}
+	
+	public InfoIndexDTO getInfoIndexDTO(){
+		return this.infoIndexDTO;
 	}
 	
 	public void setTitle(String title){
-		this.title=title;
+		this.infoIndexDTO.setTitle(title);
 	}
 
 	@Override
 	public String toString() {
-		return id+" "+title;
+		return this.infoIndexDTO.getInfoFileId()+" "+this.infoIndexDTO.getTitle();
 	}
+
+	public InfoCellController getInfoCellController(){
+		return this.infoCell;
+	}
+	
+
+	public Node getInfoNode() {
+		
+		this.infoCell.initialize(infoManager,infoIndexDTO,this);
+		return this.infoCell.getInfoCellView();
+	}
+
+	public void setInfoManager(InfoManager infoManager) {
+		this.infoManager=infoManager;
+	}
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((infoCell == null) ? 0 : infoCell.hashCode());
+		result = prime * result + ((infoIndexDTO == null) ? 0 : infoIndexDTO.hashCode());
+		result = prime * result + ((infoManager == null) ? 0 : infoManager.hashCode());
+		result = prime * result + ((loader == null) ? 0 : loader.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -52,26 +72,26 @@ public class InfoInList {
 		if (!(obj instanceof InfoInList))
 			return false;
 		InfoInList other = (InfoInList) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (infoCell == null) {
+			if (other.infoCell != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!infoCell.equals(other.infoCell))
 			return false;
-		if (title == null) {
-			if (other.title != null)
+		if (infoIndexDTO == null) {
+			if (other.infoIndexDTO != null)
 				return false;
-		} else if (!title.equals(other.title))
+		} else if (!infoIndexDTO.equals(other.infoIndexDTO))
+			return false;
+		if (infoManager == null) {
+			if (other.infoManager != null)
+				return false;
+		} else if (!infoManager.equals(other.infoManager))
+			return false;
+		if (loader == null) {
+			if (other.loader != null)
+				return false;
+		} else if (!loader.equals(other.loader))
 			return false;
 		return true;
-	}
-
-	public Node getInfoNode() {
-		this.infoCell = loader.addInfoCell();
-		this.infoCell.initialize(infoManager,infoIndexDTO,this);
-		return this.infoCell.getInfoCellView();
-	}
-
-	public void setInfoManager(InfoManager infoManager) {
-		this.infoManager=infoManager;
 	}
 }

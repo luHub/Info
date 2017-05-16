@@ -100,7 +100,7 @@ public class InfoPanelController {
 	@FXML
 	private void deleteInfoButton(ActionEvent event) {
 		//Continue here to delete items
-		if(lastSelected.equals(LastSelected.LIST)){
+		if(lastSelected.equals(LastSelected.LIST)){ 
 			System.out.println("Delete from List");
 			this.infoManager.deleteFile();
 		}else if(lastSelected.equals(LastSelected.INFO)){

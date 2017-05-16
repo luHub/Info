@@ -1,15 +1,15 @@
-package model;
+package model.ops;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import commons.info.InfoIO;
 import meta.working.FileDTO;
 import meta.working.InfoLayoutListDTO;
+import model.InfoInList;
+import model.InfoManager;
 
 
 //This will be called on selection of each INFO DTO
@@ -76,6 +76,7 @@ public class InfoLayoutFileOps implements InfoQueuebale {
 	}
 
 	
+	//TODO Redo This
 	private void save(){
 		try {
 			InfoIO.deleteFile(this.layoutFile);

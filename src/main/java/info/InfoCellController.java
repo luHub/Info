@@ -24,20 +24,29 @@ public class InfoCellController {
 
 	private InfoManager infoManager;
 	private InfoIndexDTO infoIndexDTO;
-	private InfoInList infoInList;
+	private InfoInList infoInList; 
+
+	private ChangeListener<String> stringChangeListner = new ChangeListener<String>() {
+		@Override
+		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			//TODO This should be an idependent from FileOps operation in
+			//CoverInfoOps Runnale
+			InfoCellController.this.infoIndexDTO.setTitle(newValue);
+			infoManager.updateCover();
+		}
+	};
 
 	public void initialize(final InfoManager infoManager, final InfoIndexDTO infoIndexDTO, InfoInList infoInList) {
 		this.infoManager = infoManager;
-		infoTextField.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// FileDTO<Integer,InfoIndexDTO> fileDTO = new File
-				// infoManager.updateInfoDetails(infoDTO);
-			}
-		});
+		this.infoInList = infoInList;
+		this.infoIndexDTO=infoIndexDTO;
+		
+		
 		this.infoInList=infoInList;
-		this.infoTextField.setText("INFO");
+		this.infoTextField.setText(infoIndexDTO.getTitle());
 		this.idLabel.setText(infoIndexDTO.getInfoFileId().toString());
+		//After text is setted activate listener to persist Titles
+		activateListener();
 		// this.infoManager.getInfoListView().getSelectionModel().select(obj);
 	}
 
@@ -52,6 +61,13 @@ public class InfoCellController {
 	@FXML
 	void onMousePressedTextField(MouseEvent event) {
 		this.infoManager.getInfoListView().getSelectionModel().select(infoInList);
+	}
+	
+	public void activateListener(){
+		infoTextField.textProperty().addListener(stringChangeListner);
+	}
+	public void disableListener(){
+		infoTextField.textProperty().removeListener(stringChangeListner);
 	}
 	
 

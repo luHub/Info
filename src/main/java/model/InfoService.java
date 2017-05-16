@@ -2,22 +2,21 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
-
-import javax.security.auth.x500.X500Principal;
-
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
-import meta.working.InfoDTO;
 import meta.working.InfoLayoutDTO;
 import meta.working.InfoLayoutListDTO;
 import meta.working.MapInfoDTO;
+import model.ops.InfoCoverFileOps;
+import model.ops.InfoFileOps;
+import model.ops.InfoLayoutFileOps;
+import model.ops.InfoQueuebale;
 
 
 //TODO Refactor to generic 
@@ -30,6 +29,9 @@ public class InfoService<V> extends Service<V> {
 	private final FileDTO<Integer, InfoLayoutListDTO> layoutFile =  new FileDTO<Integer, InfoLayoutListDTO>();
 	
 	protected final Queue<InfoQueuebale> queue = new ConcurrentLinkedQueue();
+	
+	//REmove this list is no longer needed
+	@Deprecated
 	private final List<InfoInList> infoForList = new ArrayList();
 	private InfoManager infoManager;
 
@@ -54,6 +56,7 @@ public class InfoService<V> extends Service<V> {
 							questionFileOps.run();
 						}
 					} catch (InterruptedException ie) {
+						ie.printStackTrace();
 						break; // Terminate
 					}
 				}
@@ -92,10 +95,10 @@ public class InfoService<V> extends Service<V> {
 		synchronized (queue) {
 			// Add work to the queue
 			InfoFileOps infoFileOps = new InfoFileOps();
-			infoFileOps.setInfoFromList(this.getInfoForList());
+			//infoFileOps.setInfoFromList(this.getInfoForList());
 			infoFileOps.setInfoMap(this.infoMap);
 			infoFileOps.setInfoManager(this.infoManager);
-			infoFileOps.setInfoFromList(infoForList);
+			//infoFileOps.setInfoFromList(infoForList);
 			infoFileOps.updateInfoToFile(fileDTO);
 			queue.add(infoFileOps);
 			// Notify the monitor object that all the threads
@@ -103,6 +106,13 @@ public class InfoService<V> extends Service<V> {
 			// begin processing work from the queue
 			queue.notify();
 		}
+		synchronized (queue) {
+			InfoCoverFileOps infoCoverFileOps = new InfoCoverFileOps(infoManager, infoForList, infoMap);
+			infoCoverFileOps.createCover(fileDTO);
+			queue.add(infoCoverFileOps);
+			queue.notify();
+		}
+		
 	}
 	
 	public void addInfoLayoutToSave(InfoLayoutDTO infoLayotDTO) {
@@ -158,11 +168,17 @@ public class InfoService<V> extends Service<V> {
 			//3. Notify  
 			queue.notify();
 		}
+		synchronized (queue) {
+			InfoCoverFileOps infoCoverFileOps = new InfoCoverFileOps(infoManager, infoForList, infoMap);
+			infoCoverFileOps.deleteCover(fileDTO);
+			queue.add(infoCoverFileOps);
+			queue.notify();
+		}
 	}
 
 	private InfoFileOps prepateFileOps() {
 		InfoFileOps infoFileOps = new InfoFileOps();
-		infoFileOps.setInfoFromList(this.infoForList);
+		//infoFileOps.setInfoFromList(this.infoForList);
 		infoFileOps.setInfoMap(this.infoMap);
 		infoFileOps.setInfoManager(this.infoManager);
 		return infoFileOps;
@@ -184,5 +200,22 @@ public class InfoService<V> extends Service<V> {
 		return this.layoutFile;
 	}
 
-	
+	public void updateCover() { 
+		synchronized (queue) { 
+			InfoCoverFileOps infoCoverFileOps = new InfoCoverFileOps(infoManager, infoForList, infoMap);
+			infoCoverFileOps.updateCover();
+			//infoFileOps.set
+			queue.add(infoCoverFileOps);
+			//3. Notify
+			queue.notify();
+		}
+	}
+
+	public void getInfoCovers() {
+		synchronized (queue) { 
+			InfoCoverFileOps infoCoverFileOps = new InfoCoverFileOps(infoManager, infoForList, infoMap);
+			queue.add(infoCoverFileOps);
+			queue.notify();
+		}
+	}
 }
