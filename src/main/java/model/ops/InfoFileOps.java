@@ -42,7 +42,6 @@ public class InfoFileOps implements InfoQueuebale {
 			final Map<Integer, FileDTO<Integer, MapInfoDTO>> infoMap = InfoIO
 					.readAllInfoFiles(this.infoManager.getInfoPath());
 			this.infoMap.putAll(infoMap);
-			infoManager.updateUI();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

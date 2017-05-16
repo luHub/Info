@@ -132,7 +132,7 @@ public class InfoManager {
 		mapInfoDTO.setTitle("INFO");
 		FileDTO<Integer, ConvertableToJSON> fileDTO = new FileDTO(fileId, INFO_PATH, ext);
 		fileDTO.setContend(mapInfoDTO);
-		infoService.addInfoFileToSave(fileDTO);
+		infoService.addInfoFileToSave(fileDTO,false);
 	}
 
 	private void initializeInfoService() {
@@ -143,8 +143,7 @@ public class InfoManager {
 		this.infoService.getLayoutFromFile();
 	}
 
-	@Deprecated
-	public void updateUI() {}
+
 
 	public User getUser() {
 		return user;
@@ -196,8 +195,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().put(mapLastId + 1, infoDTO);
 		// TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		// 3. Save File
-		this.infoService.deleteFile(currentInfoFile);
-		this.infoService.addInfoFileToSave(currentInfoFile);
+		this.infoService.deleteFile(currentInfoFile,false);
+		this.infoService.addInfoFileToSave(currentInfoFile,false);
 		// 4. UpdateDisplay
 		Platform.runLater(() -> {
 			this.editMode.setCurrentInfo(currentInfoFile);
@@ -213,8 +212,8 @@ public class InfoManager {
 			currentInfoFile.getContend().getMap().remove(lastInfoIdSelected);
 			// 3. Update FileDTO
 			// TODO use a beter way to do this if possible
-			this.infoService.deleteFile(currentInfoFile);
-			this.infoService.addInfoFileToSave(currentInfoFile);
+			this.infoService.deleteFile(currentInfoFile,false);
+			this.infoService.addInfoFileToSave(currentInfoFile,false);
 			// 4. UpdateDisplay
 			Platform.runLater(() -> {
 				this.editMode.setCurrentInfo(currentInfoFile);
@@ -233,7 +232,7 @@ public class InfoManager {
 		FileDTO<Integer, MapInfoDTO> fileDTO = new FileDTO<>();
 		fileDTO.setId(infoInList.getId());
 		fileDTO.setPath(INFO_PATH);
-		this.infoService.deleteFile(fileDTO);
+		this.infoService.deleteFile(fileDTO,false);
 	}
 
 	public void setLastInfoSelected(Integer id, InfoInList infoInList) {
@@ -249,8 +248,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().get(id).setText(infoDTO.getText());
 		// 3. Update FileDTO
 		// TODO use a beter way to do this if possible
-		this.infoService.deleteFile(currentInfoFile);
-		this.infoService.addInfoFileToSave(currentInfoFile);
+		this.infoService.deleteFile(currentInfoFile,true);
+		this.infoService.addInfoFileToSave(currentInfoFile,true);
 	}
 
 	public void createNewWebView() {
@@ -269,8 +268,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().put(mapLastId + 1, infoDTO);
 		// TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		// 3. Save File
-		this.infoService.deleteFile(currentInfoFile);
-		this.infoService.addInfoFileToSave(currentInfoFile);
+		this.infoService.deleteFile(currentInfoFile,false);
+		this.infoService.addInfoFileToSave(currentInfoFile,false);
 		// 4. UpdateDisplay
 		Platform.runLater(() -> {
 			this.editMode.setCurrentInfo(currentInfoFile);

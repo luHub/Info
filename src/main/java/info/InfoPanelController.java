@@ -93,7 +93,6 @@ public class InfoPanelController {
 
 	private void initializeInfoManager() {
 		this.infoManager.setInfoListView(infoView);
-		this.infoManager.updateUI();
 		
 	}
 

@@ -91,7 +91,12 @@ public class InfoService<V> extends Service<V> {
 		return this.infoForList;
 	}
 
-	public void addInfoFileToSave(FileDTO<Integer, ConvertableToJSON> fileDTO) {
+	//TODO REFACTOR FOR UPDATE, DELETE AND CREATE
+	//TODO REMOVE infoForList
+	public void addInfoFileToSave(FileDTO<Integer, ConvertableToJSON> fileDTO, boolean isUpdate) {
+		
+		//TODO List Should Only Update on FileDelete or Create and not
+		//For InfoUpdate
 		synchronized (queue) {
 			// Add work to the queue
 			InfoFileOps infoFileOps = new InfoFileOps();
@@ -106,13 +111,15 @@ public class InfoService<V> extends Service<V> {
 			// begin processing work from the queue
 			queue.notify();
 		}
+		//TODO Refactor dirty fix
+		if(!isUpdate){
 		synchronized (queue) {
 			InfoCoverFileOps infoCoverFileOps = new InfoCoverFileOps(infoManager, infoForList, infoMap);
 			infoCoverFileOps.createCover(fileDTO);
 			queue.add(infoCoverFileOps);
 			queue.notify();
 		}
-		
+		}
 	}
 	
 	public void addInfoLayoutToSave(InfoLayoutDTO infoLayotDTO) {
@@ -158,7 +165,7 @@ public class InfoService<V> extends Service<V> {
 	}
 
 	// TODO: Delete infoFile
-	public void deleteFile(FileDTO<Integer, ConvertableToJSON> fileDTO) {
+	public void deleteFile(FileDTO<Integer, ConvertableToJSON> fileDTO, boolean isUpdate) {
 		synchronized (queue) {
 			//1. Prepare delete Operation
 			InfoFileOps infoFileOps = prepateFileOps();
@@ -168,6 +175,8 @@ public class InfoService<V> extends Service<V> {
 			//3. Notify  
 			queue.notify();
 		}
+		//TODO refactor this ugly fix
+		if(!isUpdate)
 		synchronized (queue) {
 			InfoCoverFileOps infoCoverFileOps = new InfoCoverFileOps(infoManager, infoForList, infoMap);
 			infoCoverFileOps.deleteCover(fileDTO);
