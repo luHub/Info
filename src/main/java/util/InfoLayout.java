@@ -23,7 +23,7 @@ public class InfoLayout {
 			}
 
 			private boolean isInSouthMargin(Region region, MouseEvent event) {
-				return event.getY() > event.getY() - 5;
+				return event.getY() > region.getHeight() - 5;
 			}
 		});
 
