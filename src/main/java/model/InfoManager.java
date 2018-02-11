@@ -23,6 +23,7 @@ import meta.working.InfoCoverMapDTO;
 import meta.working.InfoDTO;
 import meta.working.InfoLayoutDTO;
 import meta.working.InfoLayoutListDTO;
+import meta.working.InfoMainLayoutDTO;
 import meta.working.InfoIndexDTO;
 import meta.working.MapInfoDTO;
 import user.User;
@@ -35,15 +36,15 @@ public class InfoManager {
 	private final String infoCover = "infoCover.json";
 	private User user;
 	private boolean isModule = true;
-	private MODE mode;
+	//private MODE mode;
 	private final EditMode editMode = new EditMode(this);
-	private ReadMode readMode;
+	//private ReadMode readMode;
 	private ListView<InfoInList> infoListView;
 
 	private InfoPanelController infoPanelController;
 
 	// Creates a concurrent Map and be careful
-	private final InfoService infoService = new InfoService();
+	private final InfoService<?> infoService = new InfoService<FileDTO<Integer,? extends ConvertableToJSON>>();
 	private Integer lastInfoIdSelected;
 	private InfoInList lastInfoInListSelected;
 
@@ -130,7 +131,7 @@ public class InfoManager {
 		infoDTO.setType(INFO_TYPE.TEXT);
 		mapInfoDTO.getMap().put(0, infoDTO);
 		mapInfoDTO.setTitle("INFO");
-		FileDTO<Integer, ConvertableToJSON> fileDTO = new FileDTO(fileId, INFO_PATH, ext);
+		FileDTO<Integer, ConvertableToJSON> fileDTO = new FileDTO<Integer, ConvertableToJSON>(fileId, INFO_PATH, ext);
 		fileDTO.setContend(mapInfoDTO);
 		infoService.addInfoFileToSave(fileDTO,false);
 	}
@@ -328,5 +329,20 @@ public class InfoManager {
 			infoListView.setItems(ol);
 			infoListView.getSelectionModel().selectedItemProperty().addListener(managerListener);
 		});
+	}
+
+	public InfoMainLayoutDTO readMainLayoutDTO() {
+		// TODO Auto-generated method stub
+		InfoMainLayoutDTO infoMainLayoutDTO = new InfoMainLayoutDTO();
+		FileDTO<Integer, InfoMainLayoutDTO> layoutFile = infoService.getMainLayoutInfo();
+		
+		//Check for layout position
+		if(layoutFile.getContend()!=null && layoutFile.getContend().getSplitPanePos()!=0){
+			infoMainLayoutDTO.setSplitPanePos(layoutFile.getContend().getSplitPanePos());
+		}else{
+			//TODO Save default values in a other file
+			infoMainLayoutDTO.setSplitPanePos(0.20f);
+		};
+		return infoMainLayoutDTO;
 	}
 }

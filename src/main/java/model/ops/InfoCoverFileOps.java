@@ -137,7 +137,7 @@ public class InfoCoverFileOps implements InfoQueuebale {
 		}
 	}
 
-	public void deleteCover(FileDTO<Integer, ConvertableToJSON> fileDTO) {
+	public void deleteCover(FileDTO<Integer,? extends ConvertableToJSON> fileDTO) {
 		//Remove from List
 		this.infoCoverMapDTO.getInfoCovers().remove(fileDTO.getId());
 		//UpdateFile		
@@ -152,7 +152,7 @@ public class InfoCoverFileOps implements InfoQueuebale {
 		this.crud = CRUD.UPDATE;
 	}
 
-	public void createCover(FileDTO<Integer, ConvertableToJSON> fileDTO) {
+	public void createCover(FileDTO<Integer, ? extends ConvertableToJSON> fileDTO) {
 		InfoIndexDTO infoListItem = new InfoIndexDTO(fileDTO.getId());
 		infoListItem.setTitle("INFO");
 		this.infoCoverMapDTO.getInfoCovers().put(fileDTO.getId(),infoListItem);

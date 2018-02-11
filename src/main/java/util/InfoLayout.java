@@ -10,7 +10,7 @@ import model.InfoManager;
 
 public class InfoLayout {
 	// Add more stuff to this utility.
-	public static void resize(final Region region,final InfoManager infoManager,final InfoLayoutDTO infoLayotDTO) {
+	public static void saveResize(final Region region,final InfoManager infoManager,final InfoLayoutDTO infoLayotDTO) {
 
 		region.setOnMouseMoved(new EventHandler<MouseEvent>() {
 			@Override
@@ -45,4 +45,7 @@ public class InfoLayout {
 	public void saveHeight(Integer id, InfoInList idBook) {
 
 	}
+	
+	
+	
 }

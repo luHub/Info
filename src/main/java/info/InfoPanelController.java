@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,14 +12,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import meta.working.InfoMainLayoutDTO;
 import model.InfoInList;
 import model.InfoManager;
 import model.MODE;
+import util.RunAfter;
  
 public class InfoPanelController { 
 	 
@@ -42,6 +45,9 @@ public class InfoPanelController {
     
     @FXML
     private AnchorPane infoDisplay;
+    
+    @FXML
+    private SplitPane splitPane;
 	
     private MODE mode = MODE.READ; 
     
@@ -56,10 +62,15 @@ public class InfoPanelController {
 	final int newText = 1;
 	final int newWeb = 2;
 	final int newImage = 3;
+	
+	private RunAfter runAfter = new RunAfter<Double>(10);
 
-    
+	final PseudoClass FAVORITE_PSEUDO_CLASS = PseudoClass.getPseudoClass("favorite");
     @FXML
     private void initialize(){
+    	
+    	splitPane.setDividerPosition(0, 0.3f);
+    	
     	setToReadMode();
     	setNewInfoButton();
     	initializeInfoManager();
@@ -97,6 +108,24 @@ public class InfoPanelController {
 				return myQuestion;
 			}
 		});
+    	
+    	
+    	
+    	//TODO WOrking on CHanges
+    	final InfoMainLayoutDTO infoLayotDTO = this.infoManager.readMainLayoutDTO();
+    	splitPane.setDividerPosition(0, infoLayotDTO.getSplitPanePos());
+    	//Split Pane Persistance
+    	
+    	splitPane.getDividers().get(0).positionProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				System.out.println("Observable Number Value:  "+observable.getValue());
+				InfoPanelController.this.runAfter.setValue(newValue);
+			}
+		});
+    	
+    	
     }
 
 	private void initializeInfoManager() {

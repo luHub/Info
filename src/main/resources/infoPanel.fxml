@@ -47,9 +47,9 @@
          <center>
             <AnchorPane BorderPane.alignment="CENTER">
                <children>
-                  <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane fx:id="splitPane" dividerPositions="0.35494880546075086" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
-                        <ListView fx:id="infoView" onMouseClicked="#onMoudeClickedList" prefHeight="350.0" prefWidth="202.0" />
+                        <ListView fx:id="infoView" onMouseClicked="#onMoudeClickedList" />
                         <AnchorPane fx:id="infoAnchorPane">
                            <children>
                               <ScrollPane fitToWidth="true" prefHeight="350.0" prefWidth="378.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

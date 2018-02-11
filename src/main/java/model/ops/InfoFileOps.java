@@ -16,7 +16,7 @@ public class InfoFileOps implements InfoQueuebale {
 	};
 
 	private ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> infoMap;
-	private FileDTO<Integer, ConvertableToJSON> info;
+	private FileDTO<Integer, ? extends ConvertableToJSON> info;
 	private SAVE save = SAVE.NO;
 	private InfoManager infoManager;
 
@@ -90,13 +90,13 @@ public class InfoFileOps implements InfoQueuebale {
 		this.infoMap = infoMap;
 	}
 
-	public void updateInfoToFile(FileDTO<Integer, ConvertableToJSON> fileDTO) {
+	public void updateInfoToFile(FileDTO<Integer, ? extends ConvertableToJSON> fileDTO) {
 		save = save.YES;
 		this.info = fileDTO;
 	}
 
 	// TODO: Add to Ops Interface
-	public void setFileToDelete(FileDTO<Integer, ConvertableToJSON> fileDTO) {
+	public void setFileToDelete(FileDTO<Integer,? extends ConvertableToJSON> fileDTO) {
 		save = SAVE.DELETE;
 		this.info = fileDTO;
 	}

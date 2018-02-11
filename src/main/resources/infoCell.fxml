@@ -12,7 +12,7 @@
       <GridPane>
         <columnConstraints>
           <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" />
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="ALWAYS" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

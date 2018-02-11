@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import meta.working.INFO_TYPE;
 import meta.working.InfoDTO;
 import meta.working.InfoLayoutDTO;
 import model.Autosave;
@@ -45,7 +46,7 @@ public class WebViewAreaController implements Editable {
    	 	
    	 	InfoLayoutDTO infoLayoutDTO = this.infoManager.readInfoLayoutDTO(id, infoInList);
 		this.webViewGridPane.setMinHeight(  infoLayoutDTO.getHeight());
-		InfoLayout.resize(webViewGridPane,infoManager,infoLayoutDTO);
+		InfoLayout.saveResize(webViewGridPane,infoManager,infoLayoutDTO);
 	} 
 
 	public void setInfoManager(InfoManager infoManager) {
@@ -71,13 +72,12 @@ public class WebViewAreaController implements Editable {
 	   	
 	   	this.urlTextField.textProperty().addListener(new ChangeListener<String>() {
 
-			private Autosave autosave=new Autosave();
+			private Autosave autosave=new Autosave(INFO_TYPE.WEB);
 
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				// TODO Auto-generated method stub
-				autosave.runWeb(newValue,infoManager,id,infoInList);
+				autosave.run(newValue,infoManager,id,infoInList);
 			}
 		});
 		

@@ -12,10 +12,12 @@ import meta.working.ConvertableToJSON;
 import meta.working.FileDTO;
 import meta.working.InfoLayoutDTO;
 import meta.working.InfoLayoutListDTO;
+import meta.working.InfoMainLayoutDTO;
 import meta.working.MapInfoDTO;
 import model.ops.InfoCoverFileOps;
 import model.ops.InfoFileOps;
 import model.ops.InfoLayoutFileOps;
+import model.ops.InfoMainLayoutOps;
 import model.ops.InfoQueuebale;
 
 
@@ -27,6 +29,8 @@ public class InfoService<V> extends Service<V> {
 	private final ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> infoMap = new ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>>();
 	
 	private final FileDTO<Integer, InfoLayoutListDTO> layoutFile =  new FileDTO<Integer, InfoLayoutListDTO>();
+	
+	private final FileDTO<Integer, InfoMainLayoutDTO> mainLayoutFile = new FileDTO<Integer,InfoMainLayoutDTO>(); 
 	
 	protected final Queue<InfoQueuebale> queue = new ConcurrentLinkedQueue();
 	
@@ -93,7 +97,7 @@ public class InfoService<V> extends Service<V> {
 
 	//TODO REFACTOR FOR UPDATE, DELETE AND CREATE
 	//TODO REMOVE infoForList
-	public void addInfoFileToSave(FileDTO<Integer, ConvertableToJSON> fileDTO, boolean isUpdate) {
+	public void addInfoFileToSave(FileDTO<Integer,? extends ConvertableToJSON> fileDTO, boolean isUpdate) {
 		
 		//TODO List Should Only Update on FileDelete or Create and not
 		//For InfoUpdate
@@ -165,7 +169,7 @@ public class InfoService<V> extends Service<V> {
 	}
 
 	// TODO: Delete infoFile
-	public void deleteFile(FileDTO<Integer, ConvertableToJSON> fileDTO, boolean isUpdate) {
+	public void deleteFile(FileDTO<Integer,? extends ConvertableToJSON> fileDTO, boolean isUpdate) {
 		synchronized (queue) {
 			//1. Prepare delete Operation
 			InfoFileOps infoFileOps = prepateFileOps();
@@ -191,7 +195,7 @@ public class InfoService<V> extends Service<V> {
 		infoFileOps.setInfoMap(this.infoMap);
 		infoFileOps.setInfoManager(this.infoManager);
 		return infoFileOps;
-	}
+	} 
 	
 	private InfoLayoutFileOps prepareLayoutFileOps(){
 		InfoLayoutFileOps infoLayoutFileOps = new InfoLayoutFileOps();
@@ -199,6 +203,11 @@ public class InfoService<V> extends Service<V> {
 		infoLayoutFileOps.setLayoutFile(this.layoutFile);
 		return infoLayoutFileOps; 
 			
+	}
+	
+	//TODO CONTINUE WORKING HERE!!!
+	private InfoMainLayoutOps prepareMainLayoutFileOps(){
+		return null;
 	}
 
 	public ConcurrentHashMap<Integer, FileDTO<Integer, MapInfoDTO>> getInfoMap() {
@@ -226,5 +235,9 @@ public class InfoService<V> extends Service<V> {
 			queue.add(infoCoverFileOps);
 			queue.notify();
 		}
+	}
+
+	public FileDTO<Integer, InfoMainLayoutDTO> getMainLayoutInfo() {
+		return this.mainLayoutFile;
 	}
 }
