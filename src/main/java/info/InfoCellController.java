@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import meta.working.FileDTO;
 import meta.working.InfoIndexDTO;
 import model.InfoInList;
 import model.InfoManager;
