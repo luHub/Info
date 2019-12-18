@@ -36,15 +36,15 @@ public class InfoManager {
 	private final String infoCover = "infoCover.json";
 	private User user;
 	private boolean isModule = true;
-	//private MODE mode;
+	// private MODE mode;
 	private final EditMode editMode = new EditMode(this);
-	//private ReadMode readMode;
+	// private ReadMode readMode;
 	private ListView<InfoInList> infoListView;
 
 	private InfoPanelController infoPanelController;
 
 	// Creates a concurrent Map and be careful
-	private final InfoService<?> infoService = new InfoService<FileDTO<Integer,? extends ConvertableToJSON>>();
+	private final InfoService<?> infoService = new InfoService<FileDTO<Integer, ? extends ConvertableToJSON>>();
 	private Integer lastInfoIdSelected;
 	private InfoInList lastInfoInListSelected;
 
@@ -55,8 +55,7 @@ public class InfoManager {
 	}
 
 	/*
-	 * Info Manager entry point, when it is created it initializes an
-	 * infoService
+	 * Info Manager entry point, when it is created it initializes an infoService
 	 */
 	public InfoManager() {
 		initUser();
@@ -133,7 +132,7 @@ public class InfoManager {
 		mapInfoDTO.setTitle("INFO");
 		FileDTO<Integer, ConvertableToJSON> fileDTO = new FileDTO<Integer, ConvertableToJSON>(fileId, INFO_PATH, ext);
 		fileDTO.setContend(mapInfoDTO);
-		infoService.addInfoFileToSave(fileDTO,false);
+		infoService.addInfoFileToSave(fileDTO, false);
 	}
 
 	private void initializeInfoService() {
@@ -143,8 +142,6 @@ public class InfoManager {
 		this.infoService.getInfoCovers();
 		this.infoService.getLayoutFromFile();
 	}
-
-
 
 	public User getUser() {
 		return user;
@@ -196,8 +193,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().put(mapLastId + 1, infoDTO);
 		// TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		// 3. Save File
-		this.infoService.deleteFile(currentInfoFile,true);
-		this.infoService.addInfoFileToSave(currentInfoFile,true);
+		this.infoService.deleteFile(currentInfoFile, true);
+		this.infoService.addInfoFileToSave(currentInfoFile, true);
 		// 4. UpdateDisplay
 		Platform.runLater(() -> {
 			this.editMode.setCurrentInfo(currentInfoFile);
@@ -213,8 +210,8 @@ public class InfoManager {
 			currentInfoFile.getContend().getMap().remove(lastInfoIdSelected);
 			// 3. Update FileDTO
 			// TODO use a beter way to do this if possible
-			this.infoService.deleteFile(currentInfoFile,true);
-			this.infoService.addInfoFileToSave(currentInfoFile,true);
+			this.infoService.deleteFile(currentInfoFile, true);
+			this.infoService.addInfoFileToSave(currentInfoFile, true);
 			// 4. UpdateDisplay
 			Platform.runLater(() -> {
 				this.editMode.setCurrentInfo(currentInfoFile);
@@ -233,7 +230,7 @@ public class InfoManager {
 		FileDTO<Integer, MapInfoDTO> fileDTO = new FileDTO<>();
 		fileDTO.setId(infoInList.getId());
 		fileDTO.setPath(INFO_PATH);
-		this.infoService.deleteFile(fileDTO,false);
+		this.infoService.deleteFile(fileDTO, false);
 	}
 
 	public void setLastInfoSelected(Integer id, InfoInList infoInList) {
@@ -249,8 +246,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().get(id).setText(infoDTO.getText());
 		// 3. Update FileDTO
 		// TODO use a beter way to do this if possible
-		this.infoService.deleteFile(currentInfoFile,true);
-		this.infoService.addInfoFileToSave(currentInfoFile,true);
+		this.infoService.deleteFile(currentInfoFile, true);
+		this.infoService.addInfoFileToSave(currentInfoFile, true);
 	}
 
 	public void createNewWebView() {
@@ -269,8 +266,8 @@ public class InfoManager {
 		currentInfoFile.getContend().getMap().put(mapLastId + 1, infoDTO);
 		// TODO Check this part used UPDATE_IO instead of DELETE/CREATE
 		// 3. Save File
-		this.infoService.deleteFile(currentInfoFile,true);
-		this.infoService.addInfoFileToSave(currentInfoFile,true);
+		this.infoService.deleteFile(currentInfoFile, true);
+		this.infoService.addInfoFileToSave(currentInfoFile, true);
 		// 4. UpdateDisplay
 		Platform.runLater(() -> {
 			this.editMode.setCurrentInfo(currentInfoFile);
@@ -313,7 +310,7 @@ public class InfoManager {
 			infoListView.getSelectionModel().selectedItemProperty().removeListener(managerListener);
 			infoListView.getItems().clear();
 			List<InfoInList> info = new ArrayList<>();
-			infoCoverMapDTO.getInfoCovers().forEach((k,v)->{
+			infoCoverMapDTO.getInfoCovers().forEach((k, v) -> {
 				InfoInList infoInList = new InfoInList(v);
 				infoInList.setInfoManager(this);
 				info.add(infoInList);
@@ -335,14 +332,21 @@ public class InfoManager {
 		// TODO Auto-generated method stub
 		InfoMainLayoutDTO infoMainLayoutDTO = new InfoMainLayoutDTO();
 		FileDTO<Integer, InfoMainLayoutDTO> layoutFile = infoService.getMainLayoutInfo();
-		
-		//Check for layout position
-		if(layoutFile.getContend()!=null && layoutFile.getContend().getSplitPanePos()!=0){
+
+		// Check for layout position
+		if (layoutFile.getContend() != null && layoutFile.getContend().getSplitPanePos() != 0) {
 			infoMainLayoutDTO.setSplitPanePos(layoutFile.getContend().getSplitPanePos());
-		}else{
-			//TODO Save default values in a other file
+		} else {
+			// TODO Save default values in a other file
 			infoMainLayoutDTO.setSplitPanePos(0.20f);
-		};
+		}
+		;
 		return infoMainLayoutDTO;
+	}
+
+	public void updateDividerPosition(float floatValue) {
+		// TODO Auto-generated method stub
+		System.out.println("Update divier position!");
+		
 	}
 }

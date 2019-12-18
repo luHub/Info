@@ -1,4 +1,4 @@
-package util;
+package info.util;
 
 public class Filters {
 

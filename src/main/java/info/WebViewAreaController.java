@@ -1,5 +1,6 @@
 package info;
 
+import info.util.InfoLayout;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -17,7 +18,6 @@ import meta.working.InfoLayoutDTO;
 import model.Autosave;
 import model.InfoInList;
 import model.InfoManager;
-import util.InfoLayout;
 
 public class WebViewAreaController implements Editable {
  	
